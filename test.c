@@ -12,7 +12,9 @@ int main(void)
     double d = cos(3.24);
     FILE *stream = NULL;
     char file_name[] = "output_vect.txt";
+    char file_name_input[] = "input_vect.txt";
     Vect_t v = Null_Vect;
+    Vect_t w = Null_Vect;
 
     /* ecriture equivalente (en plus lourd)
     Vect_t *pv = NULL;
@@ -51,11 +53,31 @@ int main(void)
 
     // autre possibilite d'utilisation
     // via un pointeur sur Vect_t
-    Vect_t* Pv = NULL;
+    Vect_t *Pv = NULL;
     Pv = malloc(sizeof(Vect_t));
     Initialize_vect(Pv, vsize);
     Finalize_vect(Pv);
-    free(Pv)
+    free(Pv);
+
+    /* --------------- */
+    stream = fopen(file_name_input, "r");
+    if (NULL == stream)
+    {
+        fprintf(stderr, "cannot open file %s", file_name_input);
+        exit(EXIT_FAILURE);
+    }
+    Read_from_stream_vect(&w, stream);
+    fclose(stream);
+    stream = NULL;
+
+    for (int i = 0; i < Get_size_vect(&w); i++)
+    {
+        printf("w[%d]=%g\n", i, Get_elem_vect(&w, i));
+    }
+
+    Finalize_vect(&w);
+
+    /* --------------- */
 
     printf("test is done.\n");
     return EXIT_SUCCESS;

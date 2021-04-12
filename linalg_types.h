@@ -13,6 +13,13 @@ struct Vect_t
 
 extern const Vect_t Null_Vect; // defined in vect.c
 
+typedef struct Matrix_t Matrix_t;
+struct Matrix_t
+{
+    unsigned int nb_li;
+    unsigned int nb_co;
+    double* data;
+};
 
 #endif
 
@@ -32,19 +39,19 @@ Vect_t v;
  \_____ data = 1032
  */
 
-
-
 /*
 Vect_t Pv;
 
 <=sizeof(Vect_t*)=>
-|_|_|_|_|_|_|_ 
+|_|_|_|_|_|_|_|_|_|_|_ 
+ \___ Pv
 
------------- espace mémoire associée à v -----------
+
+------------ espace mémoire associée à *Pv (dans le tas)-----------
 <=sizeof(int)=>|<=sizeof(double*)=>|
 |_|_|_|_|_|_|_ |_|_|_|_|_|_|_|_|_|_|
- \_ &(v.size)   \_____ &(v.data)
-&(v.size) = &v
+ \_ &(Pv->size)   \_____ &(Pv->data)
+&(Pv->size) = Pv
 
 
 ------------ espace mémoire associée à data (dans le tas) -----------
@@ -53,3 +60,55 @@ Vect_t Pv;
  \_____ data = 1032
  */
 
+
+
+/*
+Matrix_t M;
+
+attention: je note uint = unsigned int
+
+------------ espace mémoire associée à M ----------- 
+<=sizeof(uint)=>|<=sizeof(uint)=>|<=sizeof(double*)=>|
+|_|_|_|_|_|_|_  |_|_|_|_|_|_|_   |_|_|_|_|_|_|_|_|_|_|
+ \_ &(M.nb_li)  \_ &(M.nb_co)    \_____ &(M.data)
+ &(M.nb_li) = &M
+
+
+après Initialize_matrix: on peut acceder a la memoire
+pointee par M.data
+
+------------ espace mémoire associée à data (dans le tas) -----------
+<=sizeof(double)=>|<=sizeof(double)=> |<=sizeof(double)=>
+|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|_|
+ \_____ data = 3201
+ 
+l'espace memoire dont l'adresse de demarrage est M.data : 
+permet de stocker (M.nb_li)*(M.nb_co)
+
+comment va-t-on acceder aux elements de la matrice?
+
+pour simplifier les notations : I = nb_li, J = nb_co
+
+li 0   | e 0*J +0  | e 0*J +1   | ... | e 0*J + J-1
+li 1   | e 1*J + 0 | e 1*J +1   | ... | e 1*J + J-1
+li 2   | e 2*J + 0 | e 2*J +1   | ... | e 2*J + J-1
+...    | 
+li i   | e i*J + 0 | e i*J +1   | ... | e i*J + J-1
+...
+li I-1 | e (I-1)*J + 0 | e (I-1)*J +1   | ... | e (I-1)*J + J-1 
+
+M(0,0) ~> data[0] = *(data + 0)
+M(0,1) ~> data[1] = *(data + 1)
+M(0,J-1) ~> data[J-1] = *(data + J-1)
+M(1,0) ~> data[J] = *(data 1*J + 0)
+
+M(i,j) ~> data[i*J+j] = *(data i*J + j)
+
+
+
+
+ 
+ */
+
+
+*/

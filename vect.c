@@ -49,14 +49,14 @@ double Get_elem_vect(Vect_t *pv, unsigned int id)
 
 void Set_elem_vect(Vect_t *pv, unsigned int id, double val)
 {
-     pv->data[id]=val;
+    pv->data[id] = val;
 }
 
 void Write_to_stream_vect(Vect_t *pv, FILE *stream)
 {
     int vsize = Get_size_vect(pv);
 
-    fprintf(stream, "#\b %d\n", vsize);
+    fprintf(stream, "# %d\n", vsize);
     for (int i = 0; i < vsize; i++)
     {
         double data = Get_elem_vect(pv, i);
@@ -81,14 +81,12 @@ void Read_from_stream_vect(Vect_t *pv, FILE *stream)
         exit(EXIT_FAILURE);
     }
 
-    /* TODO:
     if (0 != Get_size_vect(pv))
     {
         Finalize_vect(pv);
     }
 
-    Set_size_vect(pv, vsize);
-    */
+    Initialize_vect(pv, vsize);
 
     for (int i = 0; i < vsize; i++) // boucle sur la taille du vecteur:
     {
