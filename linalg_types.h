@@ -13,13 +13,19 @@ struct Vect_t
 
 extern const Vect_t Null_Vect; // defined in vect.c
 
+
 typedef struct Matrix_t Matrix_t;
 struct Matrix_t
 {
     unsigned int nb_li;
     unsigned int nb_co;
-    double* data;
+    double *data; // pointeur sur les coef de la matrice 
+    double **line_data; //pointeur sur les lignes      /* facultatif     */
+
 };
+
+extern const Matrix_t Null_Matrix; // defined in matrix.c
+
 
 #endif
 
@@ -60,8 +66,6 @@ Vect_t Pv;
  \_____ data = 1032
  */
 
-
-
 /*
 Matrix_t M;
 
@@ -70,7 +74,7 @@ attention: je note uint = unsigned int
 ------------ espace mémoire associée à M ----------- 
 <=sizeof(uint)=>|<=sizeof(uint)=>|<=sizeof(double*)=>|
 |_|_|_|_|_|_|_  |_|_|_|_|_|_|_   |_|_|_|_|_|_|_|_|_|_|
- \_ &(M.nb_li)  \_ &(M.nb_co)    \_____ &(M.data)
+ \_ &(M.nb_li)   \_ &(M.nb_co)    \_____ &(M.data)
  &(M.nb_li) = &M
 
 
@@ -110,5 +114,19 @@ M(i,j) ~> data[i*J+j] = *(data i*J + j)
  
  */
 
+/*
+
+0 X X X X X nbcol
+1 X X X X X nbcol
+2 X X a X X
+3 X X X X X
+4 X X X X X
+5 X X X X X
+
+0 X X X X X|1 X X X X X|2 X X a X X|3 X X X X X|4 X X X X X|5 X X X X X
+
+ncol*2 + 3 => nb de double à "passer" avant d'accéder à l'elt a 
+
+a = elt de ligne 2 et colonne 3
 
 */
